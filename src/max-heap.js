@@ -5,7 +5,7 @@ class MaxHeap {
 	constructor() {
 		this.root = null;
 		this.parentNodes = [];
-		this.size = 0;		
+		this.length = 0;		
 	}
 
 	push(data, priority) {
@@ -16,9 +16,11 @@ class MaxHeap {
 
 	pop() {
 		if(!this.isEmpty()){				
-			this.size--;
 			let root = this.detachRoot();
-			this.restoreRootFromLastInsertedNode(root);
+			if(this.isEmpty()){
+				return root.data;
+			}
+			this.restoreRootFromLastInsertedNode(root);			
 			this.shiftNodeDown(this.root);
 			return root.data;
 		}
@@ -30,6 +32,7 @@ class MaxHeap {
 		if(rootIndex >= 0)
 			this.parentNodes.splice(rootIndex, 1);
 		this.root = null;
+		this.length--;
 		return root;
 	}
 
@@ -68,7 +71,7 @@ class MaxHeap {
 	}
 
 	size() {
-		return this.size;
+		return this.length;
 	}
 
 	isEmpty() {
@@ -78,7 +81,7 @@ class MaxHeap {
 	clear() {
 		this.root = null;		
 		this.parentNodes = [];
-		this.size = 0;
+		this.length = 0;
 	}
 
 	insertNode(node) {
@@ -91,7 +94,7 @@ class MaxHeap {
     if (this.parentNodes[0].left && this.parentNodes[0].right) {
       this.parentNodes.shift();
     }
-		this.size++;
+		this.length++;
 	}
 
 	shiftNodeUp(node) {
@@ -114,7 +117,7 @@ class MaxHeap {
 
 	shiftNodeDown(node) {
 		if(node.left != null && node.right != null){
-			if(node.priority < node.left.priority && node.priority < node.right.priority)
+			if(node.priority > node.left.priority && node.priority > node.right.priority)
 				return;
 			if(node.left.priority > node.right.priority){
 				this.shiftNodeUp(node.left);
@@ -133,4 +136,5 @@ class MaxHeap {
 		}
 	}
 }
+
 module.exports = MaxHeap;

@@ -36,49 +36,41 @@ class Node {
 
 	swapWithParent() {
 		
-				if(this.parent != null){
-					var parent = this.parent;
-					if(parent.parent != null){
-						let left = this.left;
-						let right = this.right;
-						
-						if(parent == parent.parent.left){
-							parent.parent.left = this;
-						}
-						else
-							parent.parent.right = this;
-						this.parent = parent.parent;
-						parent.left = left;
-						parent.right = right;
-					}
-					else{
-						let left = this.left;
-						let right = this.right;
-						this.parent = null;
-						if(parent.left == this){
-							this.left = parent;
-						
-							if(parent.right != null){
-								this.right = parent.right;
-								this.right.parent = this;
-							}
-							
-						}
-						else{
-							this.right = parent;
-							if(parent.left != null){ 
-								this.left = parent.left;
-								this.left.parent = this;
-							}
-						}
-						parent.left = left;
-						parent.right = right;
-					}
-					
-					parent.parent = this;
-					
+		if (this.parent) {
+			var prevParent = this.parent.parent;
+			var oneParent = this.parent;
+			var sibling;
+			var leftSon = this.left;
+			var rightSon = this.right;
+
+			if (prevParent) {
+				if (this.parent === prevParent.left) {
+					prevParent.left = this;
+				} else if (this.parent === prevParent.right) {
+					prevParent.right = this;
 				}
 			}
+
+			if (this === oneParent.left){
+				sibling = this.parent.right;
+				this.right = sibling;
+				this.left = oneParent;
+			} else if (this === oneParent.right){
+				sibling = this.parent.left;
+				this.left = sibling;
+				this.right = oneParent;
+			}
+
+			this.parent = prevParent;
+
+			if (sibling) { sibling.parent = this };
+			oneParent.parent = this;
+			oneParent.left = leftSon;
+			oneParent.right = rightSon;
+			if (leftSon) { leftSon.parent = oneParent };
+			if (rightSon) { rightSon.parent = oneParent };
+		}
+	}
 		
 }
 
